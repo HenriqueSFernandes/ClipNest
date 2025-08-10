@@ -10,7 +10,7 @@ Users can save bookmarks, organize them into folders and ask the built-in AI cha
 ## Core Features
 
 - Save bookmarks (URL input and browser extension)
-- Automatic content extration & indexing for semantic search
+- Automatic content extraction & indexing for semantic search
 - Project folders to organize bookmarks
 - AI chatbot that understands and answers questions about the saved content
 - File upload for extra context
