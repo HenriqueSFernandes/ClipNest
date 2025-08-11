@@ -31,6 +31,14 @@ const app = new Elysia()
       allowedHeaders: ["Content-Type", "Authorization"],
     }),
   )
+  .use(
+    cors({
+      origin: "https://clipnest.rickyf.duckdns.org",
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      credentials: true,
+      allowedHeaders: ["Content-Type", "Authorization"],
+    }),
+  )
   .use(betterAuth)
   .get("/user", ({ user }) => user, {
     auth: true,
