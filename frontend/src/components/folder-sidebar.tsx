@@ -27,7 +27,7 @@ export function FolderSidebar({ folders, selectedFolder, onSelectFolder, onAddFo
               <span className="text-sm font-medium text-blue-900">AI Tip</span>
             </div>
             <p className="text-xs text-blue-700">
-              Ask the AI to "show me bookmarks from [folder name]" to focus on specific collections!
+              Ask the AI to &quot;show me bookmarks from [folder name]&quot; to focus on specific collections!
             </p>
           </div>
         ) : (
@@ -86,10 +86,10 @@ export function FolderSidebar({ folders, selectedFolder, onSelectFolder, onAddFo
             <h3 className="text-sm font-medium text-gray-900">Quick AI Commands</h3>
             <div className="space-y-2 text-xs">
               <div className="p-2 bg-gray-50 rounded text-gray-600">
-                "Summarize my {folders[0]?.name.toLowerCase()} bookmarks"
+                &quot;Summarize my {folders[0]?.name.toLowerCase()} bookmarks&quot;
               </div>
-              <div className="p-2 bg-gray-50 rounded text-gray-600">"Find bookmarks about [topic]"</div>
-              <div className="p-2 bg-gray-50 rounded text-gray-600">"Show me recent saves"</div>
+              <div className="p-2 bg-gray-50 rounded text-gray-600">&quot;Find bookmarks about [topic]&quot;</div>
+              <div className="p-2 bg-gray-50 rounded text-gray-600">&quot;Show me recent saves&quot;</div>
             </div>
           </div>
         )}

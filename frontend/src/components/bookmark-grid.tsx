@@ -1,22 +1,23 @@
-"use client"
+/* eslint-disable @next/next/no-img-element */
+"use client";
 
-import { ExternalLink, Calendar } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { ExternalLink, Calendar } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface Bookmark {
-  id: string
-  title: string
-  url: string
-  favicon: string
-  snippet: string
-  dateAdded: string
-  folder: string
+  id: string;
+  title: string;
+  url: string;
+  favicon: string;
+  snippet: string;
+  dateAdded: string;
+  folder: string;
 }
 
 interface BookmarkGridProps {
-  bookmarks: Bookmark[]
-  selectedFolder: string | null
+  bookmarks: Bookmark[];
+  selectedFolder: string | null;
 }
 
 export function BookmarkGrid({ bookmarks, selectedFolder }: BookmarkGridProps) {
@@ -26,14 +27,16 @@ export function BookmarkGrid({ bookmarks, selectedFolder }: BookmarkGridProps) {
         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
           <ExternalLink className="h-8 w-8 text-gray-400" />
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No bookmarks found</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">
+          No bookmarks found
+        </h3>
         <p className="text-gray-500 max-w-sm">
           {selectedFolder
             ? `No bookmarks in "${selectedFolder}" folder yet. Add your first bookmark to get started.`
             : "You haven't saved any bookmarks yet. Add your first bookmark to get started."}
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -49,7 +52,10 @@ export function BookmarkGrid({ bookmarks, selectedFolder }: BookmarkGridProps) {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {bookmarks.map((bookmark) => (
-          <Card key={bookmark.id} className="hover:shadow-md transition-shadow cursor-pointer">
+          <Card
+            key={bookmark.id}
+            className="hover:shadow-md transition-shadow cursor-pointer"
+          >
             <CardContent className="p-4">
               <div className="space-y-3">
                 <div className="flex items-start space-x-3">
@@ -58,7 +64,7 @@ export function BookmarkGrid({ bookmarks, selectedFolder }: BookmarkGridProps) {
                     alt=""
                     className="w-4 h-4 mt-1 flex-shrink-0"
                     onError={(e) => {
-                      e.currentTarget.src = "/simple-bookmark-icon.png"
+                      e.currentTarget.src = "/simple-bookmark-icon.png";
                     }}
                   />
                   <div className="flex-1 min-w-0">
@@ -74,12 +80,16 @@ export function BookmarkGrid({ bookmarks, selectedFolder }: BookmarkGridProps) {
                   <ExternalLink className="h-4 w-4 text-gray-400 flex-shrink-0" />
                 </div>
 
-                <p className="text-sm text-gray-600 line-clamp-2">{bookmark.snippet}</p>
+                <p className="text-sm text-gray-600 line-clamp-2">
+                  {bookmark.snippet}
+                </p>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 text-xs text-gray-500">
                     <Calendar className="h-3 w-3" />
-                    <span>{new Date(bookmark.dateAdded).toLocaleDateString()}</span>
+                    <span>
+                      {new Date(bookmark.dateAdded).toLocaleDateString()}
+                    </span>
                   </div>
                   <Badge variant="secondary" className="text-xs">
                     {bookmark.folder}
@@ -91,5 +101,5 @@ export function BookmarkGrid({ bookmarks, selectedFolder }: BookmarkGridProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }

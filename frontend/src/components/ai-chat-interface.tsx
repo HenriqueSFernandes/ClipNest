@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import type React from "react"
@@ -27,6 +28,7 @@ interface AIChatInterfaceProps {
   onSwitchToManagement: () => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function AIChatInterface({ bookmarks, folders, selectedFolder, onSwitchToManagement }: AIChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
