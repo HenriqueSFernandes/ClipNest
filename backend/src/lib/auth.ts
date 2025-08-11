@@ -3,7 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
 
 export const auth = betterAuth({
-  trustedOrigins: ["http://localhost:3000", "http://localhost:4000"],
+  trustedOrigins: ["http://localhost:3000", "http://localhost:4000", "https://api.clipnest.rickyf.duckdns.org", "https://clipnest.rickyf.duckdns.org"],
   database: drizzleAdapter(db, {
     provider: "pg",
   }),

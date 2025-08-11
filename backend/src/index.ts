@@ -35,6 +35,7 @@ const app = new Elysia()
   .get("/user", ({ user }) => user, {
     auth: true,
   })
+  .get("/health", () => ({ status: "ok" }))
   .listen(4000);
 
 console.log(
