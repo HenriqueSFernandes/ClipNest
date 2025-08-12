@@ -4,48 +4,55 @@ import { cors } from "@elysiajs/cors";
 import swagger from "@elysiajs/swagger";
 
 const betterAuth = new Elysia({ name: "better-auth" })
-  .mount(auth.handler)
-  .macro({
-    auth: {
-      async resolve({ status, request: { headers } }) {
-        const session = await auth.api.getSession({
-          headers,
-        });
+	.mount(auth.handler)
+	.macro({
+		auth: {
+			async resolve({ status, request: { headers } }) {
+				const session = await auth.api.getSession({
+					headers,
+				});
 
-        if (!session) return status(401);
+				if (!session) return status(401);
 
-        return {
-          user: session.user,
-          session: session.session,
-        };
-      },
-    },
-  });
+				return {
+					user: session.user,
+					session: session.session,
+				};
+			},
+		},
+	});
+
+const logger = new Elysia({ name: "logger" }).onRequest(({ request }) => {
+	const { method, url } = request;
+	console.log(`[${new Date().toISOString()}] ${method} ${url}`);
+});
+
 const app = new Elysia()
-  .use(swagger())
-  .use(
-    cors({
-      origin: "http://localhost:3000",
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      credentials: true,
-      allowedHeaders: ["Content-Type", "Authorization"],
-    }),
-  )
-  .use(
-    cors({
-      origin: "https://clipnest.rickyf.duckdns.org",
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      credentials: true,
-      allowedHeaders: ["Content-Type", "Authorization"],
-    }),
-  )
-  .use(betterAuth)
-  .get("/user", ({ user }) => user, {
-    auth: true,
-  })
-  .get("/health", () => ({ status: "ok" }))
-  .listen(4000);
+	.use(swagger())
+	.use(
+		cors({
+			origin: "http://localhost:3000",
+			methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+			credentials: true,
+			allowedHeaders: ["Content-Type", "Authorization"],
+		}),
+	)
+	.use(
+		cors({
+			origin: "https://clipnest.rickyf.duckdns.org",
+			methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+			credentials: true,
+			allowedHeaders: ["Content-Type", "Authorization"],
+		}),
+	)
+	.use(logger)
+	.use(betterAuth)
+	.get("/user", ({ user }) => user, {
+		auth: true,
+	})
+	.get("/health", () => ({ status: "ok" }))
+	.listen(4000);
 
 console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+	`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
 );
