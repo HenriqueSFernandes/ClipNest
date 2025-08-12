@@ -39,7 +39,7 @@ const app = new Elysia()
 	)
 	.use(
 		cors({
-			origin: "https://clipnest.rickyf.duckdns.org",
+			origin: "https://clipnest.cloud",
 			methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 			credentials: true,
 			allowedHeaders: ["Content-Type", "Authorization"],
