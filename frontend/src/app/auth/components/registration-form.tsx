@@ -1,6 +1,6 @@
 "use client";
 
-import type React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,7 @@ import {
   CardFooter,
   CardTitle,
 } from "@/components/ui/card";
+import { Eye, EyeOff } from "lucide-react";
 
 interface RegistrationFormProps {
   handleRegister: (e: React.FormEvent) => Promise<void>;
@@ -20,6 +21,8 @@ export default function RegistrationForm({
   handleRegister,
   isLoading,
 }: RegistrationFormProps) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <form onSubmit={handleRegister}>
       <CardContent className="space-y-4">
@@ -45,14 +48,27 @@ export default function RegistrationForm({
             required
           />
         </div>
-        <div className="space-y-2">
+        <div className="relative space-y-2">
           <Label htmlFor="password-register">Password</Label>
           <Input
             id="password-register"
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Create a password"
             required
           />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-6"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <EyeOff className="h-5 w-5" />
+            ) : (
+              <Eye className="h-w-5" />
+            )}
+          </Button>
         </div>
       </CardContent>
       <CardFooter>

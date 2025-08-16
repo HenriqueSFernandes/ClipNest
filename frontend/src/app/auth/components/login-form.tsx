@@ -1,6 +1,6 @@
 "use client";
 
-import type React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import {
   CardFooter,
   CardTitle,
 } from "@/components/ui/card";
+import { Eye, EyeOff } from "lucide-react";
 
 interface LoginFormProps {
   handleLogin: (e: React.FormEvent) => Promise<void>;
@@ -18,6 +19,8 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ handleLogin, isLoading }: LoginFormProps) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <form onSubmit={handleLogin}>
       <CardContent className="space-y-4">
@@ -34,14 +37,27 @@ export default function LoginForm({ handleLogin, isLoading }: LoginFormProps) {
             required
           />
         </div>
-        <div className="space-y-2">
+        <div className="relative space-y-2">
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
             required
           />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-6"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? (
+              <EyeOff className="h-5 w-5" />
+            ) : (
+              <Eye className="h-5 w-5" />
+            )}
+          </Button>
         </div>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
