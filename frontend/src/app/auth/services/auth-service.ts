@@ -12,6 +12,7 @@ export const useAuth = () => {
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
+		// TODO: handle missing email verification and other errors
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const email = form.email.value;
@@ -67,6 +68,17 @@ export const useAuth = () => {
       },
     );
   };
+
+	const handleLogout = async () => {
+		const {data, error} = await authClient.signOut({
+			fetchOptions: {
+				onSuccess: () => {
+					router.push("/auth");
+				}
+			}
+		})
+
+	}
 
   return {
     isLoading,
