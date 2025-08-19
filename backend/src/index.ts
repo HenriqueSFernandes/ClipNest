@@ -32,15 +32,7 @@ const app = new Elysia()
   .use(swagger())
   .use(
     cors({
-      origin: "http://localhost:3000",
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      credentials: true,
-      allowedHeaders: ["Content-Type", "Authorization"],
-    }),
-  )
-  .use(
-    cors({
-      origin: "https://clipnest.cloud",
+      origin: ["http://localhost:3000", "https://app.clipnest.cloud"],
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       credentials: true,
       allowedHeaders: ["Content-Type", "Authorization"],

@@ -9,7 +9,7 @@ export const auth = betterAuth({
 		"http://localhost:3000",
 		"http://localhost:4000",
 		"https://api.clipnest.cloud",
-		"https://clipnest.cloud",
+		"https://app.clipnest.cloud",
 	],
 	database: drizzleAdapter(db, {
 		provider: "pg",
