@@ -22,8 +22,8 @@ export const auth = betterAuth({
 				url,
 				userName: user.name,
 				userEmail: user.email,
-			})
-		}
+			});
+		},
 	},
 	// emailVerification: {
 	// 	sendVerificationEmail: async ({ user, url, token }, request) => {
@@ -35,4 +35,13 @@ export const auth = betterAuth({
 	// 		});
 	// 	},
 	// },
+	advanced: {
+		crossSubDomainCookies: {
+			enabled: true,
+		},
+		defaultCookieAttributes: {
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "lax",
+		},
+	},
 });
