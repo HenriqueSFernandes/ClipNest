@@ -1,6 +1,7 @@
 import { render } from "@react-email/components";
 import nodemailer from "nodemailer";
 import { VerifyEmail } from "../emails/VerifyEmail";
+import ResetPasswordEmail from "../emails/ResetPassword";
 
 const transporter = nodemailer.createTransport({
 	host: process.env.EMAIL_HOST,
@@ -18,6 +19,12 @@ const transporter = nodemailer.createTransport({
 interface sendVerificationEmailProps {
 	verificationUrl: string;
 	callbackUrl?: string;
+	userName?: string;
+	userEmail: string;
+}
+
+interface sendPasswordResetEmailProps {
+	url: string;
 	userName?: string;
 	userEmail: string;
 }
@@ -41,6 +48,28 @@ export const sendVerificationEmail = async ({
 		from: "no-reply@clipnest.cloud",
 		to: userEmail,
 		subject: "Verify your email",
+		html: verifyEmailHtml,
+	};
+
+	await transporter.sendMail(options);
+};
+
+export const sendPasswordResetEmail = async ({
+	url,
+	userName,
+	userEmail,
+}: sendPasswordResetEmailProps) => {
+
+	const verifyEmailHtml = await render(
+		ResetPasswordEmail({
+			url,
+			userName,
+		}),
+	);
+	const options = {
+		from: "no-reply@clipnest.cloud",
+		to: userEmail,
+		subject: "Reset your password",
 		html: verifyEmailHtml,
 	};
 

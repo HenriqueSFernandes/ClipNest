@@ -66,7 +66,7 @@ export default function LoginForm({ handleLogin, isLoading, error }: LoginFormPr
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Signing in..." : "Sign in"}
         </Button>
-        <Link href="#" className="text-sm text-blue-600 hover:underline">
+        <Link href="/auth/forgot-password" className="text-sm text-blue-600 hover:underline">
           Forgot your password?
         </Link>
       </CardFooter>

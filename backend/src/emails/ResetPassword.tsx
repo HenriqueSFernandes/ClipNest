@@ -14,22 +14,22 @@ import {
 } from "@react-email/components";
 import React from "react";
 
-interface VerifyEmailProps {
+interface ResetPasswordEmailProps {
 	url?: string;
 	userName?: string;
 }
 
-export const VerifyEmail = ({
+export const ResetPasswordEmail = ({
 	url,
 	userName,
-}: VerifyEmailProps) => {
+}: ResetPasswordEmailProps) => {
 				const frontendUrl = process.env.BASE_FRONTEND_URL || "https://clipnest.cloud";
 
         return (
             <Html>
                 <Head />
                 <Body style={main}>
-                    <Preview>Confirm your ClipNest account</Preview>
+                    <Preview>Reset your ClipNest password</Preview>
                     <Container style={container}>
                         <Img
                             src={`${frontendUrl}/clipnest-logo.svg`}
@@ -39,25 +39,26 @@ export const VerifyEmail = ({
                             style={logo} />
 
                         {/* Heading */}
-                        <Heading style={heading}>Confirm your ClipNest account</Heading>
+                        <Heading style={heading}>Reset your password</Heading>
 
                         {/* Greeting */}
                         <Text style={paragraph}>{userName ? `Hi ${userName},` : "Hello,"}</Text>
                         <Text style={paragraph}>
-                            Thanks for signing up to <strong>ClipNest</strong>. Please confirm
-                            your email address to activate your account.
+                            We received a request to reset the password for your{" "}
+                            <strong>ClipNest</strong> account. Click the button below to set a new
+                            password.
                         </Text>
 
                         {/* Button */}
                         <Section style={buttonContainer}>
                             <Button style={button} href={url}>
-                                Confirm Your Account
+                                Reset Password
                             </Button>
                         </Section>
 
                         {/* Fallback link */}
                         <Text style={paragraph}>
-                            Didn’t work? Copy and paste this link into your browser:
+                            If the button doesn’t work, copy and paste this link into your browser:
                         </Text>
                         <Link href={url} style={link}>
                             {url}
@@ -67,7 +68,8 @@ export const VerifyEmail = ({
 
                         {/* Footer */}
                         <Text style={footer}>
-                            If you didn’t create a ClipNest account, you can ignore this email.
+                            If you didn’t request a password reset, you can safely ignore this
+                            email—your password will remain unchanged.
                         </Text>
                     </Container>
                 </Body>
@@ -75,12 +77,12 @@ export const VerifyEmail = ({
         );
     };
 
-VerifyEmail.PreviewProps = {
-	verificationUrl: "https://clipnest.cloud/verify/abc123",
+ResetPasswordEmail.PreviewProps = {
+	url: "https://clipnest.cloud/reset/xyz456",
 	userName: "Henrique",
-} as VerifyEmailProps;
+} as ResetPasswordEmailProps;
 
-export default VerifyEmail;
+export default ResetPasswordEmail;
 
 /* ---------- Styles ---------- */
 
@@ -94,7 +96,7 @@ const container = {
 	margin: "0 auto",
 	padding: "20px 0 48px",
 	maxWidth: "560px",
-};
+}
 
 const logo = {
 	borderRadius: 8,
@@ -104,48 +106,45 @@ const logo = {
 
 const heading = {
 	fontSize: "24px",
-	letterSpacing: "-0.5px",
-	lineHeight: "1.3",
-	fontWeight: "400",
-	color: "#484848",
-	padding: "17px 0 0",
+	fontWeight: "bold",
+	textAlign: "center" as const,
+	margin: "40px 0 20px",
 };
 
 const paragraph = {
-	margin: "0 0 15px",
-	fontSize: "15px",
-	lineHeight: "1.4",
-	color: "#3c4149",
+	fontSize: "16px",
+	lineHeight: "26px",
+	margin: "16px 0",
 };
 
 const buttonContainer = {
-	padding: "27px 0 27px",
+	textAlign: "center" as const,
+	margin: "30px 0",
 };
 
 const button = {
-	backgroundColor: "#2563eb",
-	borderRadius: "4px",
-	fontWeight: "600",
-	color: "#fff",
-	fontSize: "15px",
+	backgroundColor: "#4F46E5",
+	color: "#ffffff",
+	fontSize: "16px",
+	fontWeight: "bold",
 	textDecoration: "none",
-	textAlign: "center" as const,
-	display: "block",
-	padding: "11px 23px",
+	padding: "12px 24px",
+	borderRadius: "6px",
 };
 
 const link = {
-	fontSize: "14px",
-	color: "#2563eb",
+	color: "#4F46E5",
 	wordBreak: "break-all" as const,
 };
 
 const hr = {
-	borderColor: "#dfe1e4",
-	margin: "42px 0 26px",
+	borderColor: "#eaeaea",
+	margin: "26px 0",
 };
 
 const footer = {
-	fontSize: "13px",
-	color: "#8898aa",
+	fontSize: "12px",
+	color: "#888888",
+	lineHeight: "20px",
 };
+

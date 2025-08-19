@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
-import { sendVerificationEmail } from "./email";
+import { sendPasswordResetEmail, sendVerificationEmail } from "./email";
 import "dotenv/config";
 
 export const auth = betterAuth({
@@ -17,6 +17,13 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 		requireEmailVerification: false,
+		sendResetPassword: async ({ user, url, token }, request) => {
+			await sendPasswordResetEmail({
+				url,
+				userName: user.name,
+				userEmail: user.email,
+			})
+		}
 	},
 	// emailVerification: {
 	// 	sendVerificationEmail: async ({ user, url, token }, request) => {
