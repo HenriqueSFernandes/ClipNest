@@ -9,16 +9,17 @@ import { useRouter } from "next/navigation";
 
 export const useAuth = () => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
 
 	const handleLogin = async (e: React.FormEvent) => {
-		// TODO: handle missing email verification and other errors
 		e.preventDefault();
+		setError(null); // Clear previous errors
 		const form = e.target as HTMLFormElement;
 		const email = form.email.value;
 		const password = form.password.value;
 
-		const { data, error } = await authClient.signIn.email(
+		const { data, error: authError } = await authClient.signIn.email(
 			{
 				email,
 				password,
@@ -32,12 +33,8 @@ export const useAuth = () => {
 					router.push("/dashboard");
 				},
 				onError: (ctx) => {
-					// if (ctx.error.status === 403) {
-					//   setIsLoading(false);
-					//   router.push("/auth/check-email");
-					// } else {
-					alert(ctx.error.message);
-					// }
+					setIsLoading(false);
+					setError(ctx.error.message);
 				},
 			},
 		);
@@ -45,13 +42,14 @@ export const useAuth = () => {
 
 	const handleRegister = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setError(null); // Clear previous errors
 
 		const form = e.target as HTMLFormElement;
 		const name = form["name-register"].value;
 		const email = form["email-register"].value;
 		const password = form["password-register"].value;
 
-		const { data, error } = await authClient.signUp.email(
+		const { data, error: authError } = await authClient.signUp.email(
 			{
 				email,
 				password,
@@ -67,7 +65,8 @@ export const useAuth = () => {
 					router.push("/dashboard");
 				},
 				onError: (ctx) => {
-					alert(ctx.error.message);
+					setIsLoading(false);
+					setError(ctx.error.message);
 					console.log(ctx);
 				},
 			},
@@ -84,10 +83,16 @@ export const useAuth = () => {
 		});
 	};
 
+	const clearError = () => {
+		setError(null);
+	};
+
 	return {
 		isLoading,
+		error,
 		handleLogin,
 		handleRegister,
 		handleLogout,
+		clearError,
 	};
 };

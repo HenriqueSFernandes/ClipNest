@@ -15,11 +15,13 @@ import { Eye, EyeOff } from "lucide-react";
 interface RegistrationFormProps {
   handleRegister: (e: React.FormEvent) => Promise<void>;
   isLoading: boolean;
+  error: string | null;
 }
 
 export default function RegistrationForm({
   handleRegister,
   isLoading,
+  error,
 }: RegistrationFormProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -71,7 +73,8 @@ export default function RegistrationForm({
           </Button>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex flex-col space-y-4">
+				{error && <p className="text-sm text-red-600">{error}</p>}
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Creating account..." : "Create account"}
         </Button>

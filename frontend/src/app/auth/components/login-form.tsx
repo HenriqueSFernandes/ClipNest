@@ -16,9 +16,10 @@ import { Eye, EyeOff } from "lucide-react";
 interface LoginFormProps {
   handleLogin: (e: React.FormEvent) => Promise<void>;
   isLoading: boolean;
+  error: string | null;
 }
 
-export default function LoginForm({ handleLogin, isLoading }: LoginFormProps) {
+export default function LoginForm({ handleLogin, isLoading, error }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -61,6 +62,7 @@ export default function LoginForm({ handleLogin, isLoading }: LoginFormProps) {
         </div>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
+				{error && <p className="text-sm text-red-600">{error}</p>}
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Signing in..." : "Sign in"}
         </Button>

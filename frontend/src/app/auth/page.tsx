@@ -8,7 +8,7 @@ import RegistrationForm from "./components/registration-form";
 import { useAuth } from "./services/auth-service";
 
 export default function AuthPage() {
-  const { isLoading, handleLogin, handleRegister } = useAuth();
+  const { isLoading, handleLogin, handleRegister, error, clearError } = useAuth();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -21,7 +21,7 @@ export default function AuthPage() {
         </div>
 
         <Card>
-          <Tabs defaultValue="login" className="w-full">
+          <Tabs defaultValue="login" className="w-full" onValueChange={clearError}>
             <CardHeader>
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>
@@ -30,13 +30,14 @@ export default function AuthPage() {
             </CardHeader>
 
             <TabsContent value="login">
-              <LoginForm handleLogin={handleLogin} isLoading={isLoading} />
+              <LoginForm handleLogin={handleLogin} isLoading={isLoading} error={error} />
             </TabsContent>
 
             <TabsContent value="register">
               <RegistrationForm
                 handleRegister={handleRegister}
                 isLoading={isLoading}
+                error={error}
               />
             </TabsContent>
           </Tabs>
