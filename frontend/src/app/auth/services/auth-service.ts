@@ -8,81 +8,86 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
 export const useAuth = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+	const [isLoading, setIsLoading] = useState(false);
+	const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
+	const handleLogin = async (e: React.FormEvent) => {
 		// TODO: handle missing email verification and other errors
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const email = form.email.value;
-    const password = form.password.value;
+		e.preventDefault();
+		const form = e.target as HTMLFormElement;
+		const email = form.email.value;
+		const password = form.password.value;
 
-    const { data, error } = await authClient.signIn.email(
-      {
-        email,
-        password,
-      },
-      {
-        onRequest: (ctx) => {
-          setIsLoading(true);
-        },
-        onSuccess: (ctx) => {
-          setIsLoading(false);
-          router.push("/dashboard");
-        },
-        onError: (ctx) => {
-          alert(ctx.error.message);
-          console.log(ctx);
-        },
-      },
-    );
-  };
+		const { data, error } = await authClient.signIn.email(
+			{
+				email,
+				password,
+			},
+			{
+				onRequest: (ctx) => {
+					setIsLoading(true);
+				},
+				onSuccess: (ctx) => {
+					setIsLoading(false);
+					router.push("/dashboard");
+				},
+				onError: (ctx) => {
+					// if (ctx.error.status === 403) {
+					//   setIsLoading(false);
+					//   router.push("/auth/check-email");
+					// } else {
+					alert(ctx.error.message);
+					// }
+				},
+			},
+		);
+	};
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
+	const handleRegister = async (e: React.FormEvent) => {
+		e.preventDefault();
 
-    const form = e.target as HTMLFormElement;
-    const name = form["name-register"].value;
-    const email = form["email-register"].value;
-    const password = form["password-register"].value;
+		const form = e.target as HTMLFormElement;
+		const name = form["name-register"].value;
+		const email = form["email-register"].value;
+		const password = form["password-register"].value;
 
-    const { data, error } = await authClient.signUp.email(
-      {
-        email,
-        password,
-        name,
-      },
-      {
-        onRequest: (ctx) => {
-          setIsLoading(true);
-        },
-        onSuccess: (ctx) => {
-          setIsLoading(false);
-          router.push("/dashboard");
-        },
-        onError: (ctx) => {
-          alert(ctx.error.message);
-          console.log(ctx);
-        },
-      },
-    );
-  };
+		const { data, error } = await authClient.signUp.email(
+			{
+				email,
+				password,
+				name,
+			},
+			{
+				onRequest: (ctx) => {
+					setIsLoading(true);
+				},
+				onSuccess: (ctx) => {
+					setIsLoading(false);
+					// router.push("/auth/check-email");
+					router.push("/dashboard");
+				},
+				onError: (ctx) => {
+					alert(ctx.error.message);
+					console.log(ctx);
+				},
+			},
+		);
+	};
 
 	const handleLogout = async () => {
-		const {data, error} = await authClient.signOut({
+		const { data, error } = await authClient.signOut({
 			fetchOptions: {
 				onSuccess: () => {
 					router.push("/auth");
-				}
-			}
-		})
+				},
+			},
+		});
+	};
 
-	}
-
-  return {
-    isLoading,
-    handleLogin,
-    handleRegister,
-  };
+	return {
+		isLoading,
+		handleLogin,
+		handleRegister,
+		handleLogout,
+	};
 };

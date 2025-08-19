@@ -1,25 +1,30 @@
-"use client"
+"use client";
 
-import { Settings, LogOut, User, MessageSquare, Grid3X3 } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Settings, LogOut, User, MessageSquare, Grid3X3 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bookmark } from "lucide-react"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { ViewMode } from "@/app/dashboard/page"
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Bookmark } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { ViewMode } from "@/app/dashboard/page";
+import { useAuth } from "@/app/auth/services/auth-service";
 
 interface DashboardHeaderProps {
-  viewMode: ViewMode
-  onViewModeChange: (mode: ViewMode) => void
+  viewMode: ViewMode;
+  onViewModeChange: (mode: ViewMode) => void;
 }
 
-export function DashboardHeader({ viewMode, onViewModeChange }: DashboardHeaderProps) {
+export function DashboardHeader({
+  viewMode,
+  onViewModeChange,
+}: DashboardHeaderProps) {
+  const { handleLogout } = useAuth();
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
@@ -27,16 +32,27 @@ export function DashboardHeader({ viewMode, onViewModeChange }: DashboardHeaderP
           <div className="flex items-center space-x-2">
             <Bookmark className="h-6 w-6 text-blue-600" />
             <h1 className="text-xl font-bold text-gray-900">ClipNest</h1>
-            <span className="text-sm text-gray-500 ml-2">AI-Powered Smart Bookmarks</span>
+            <span className="text-sm text-gray-500 ml-2">
+              AI-Powered Smart Bookmarks
+            </span>
           </div>
 
-          <Tabs value={viewMode} onValueChange={(value) => onViewModeChange(value as ViewMode)}>
+          <Tabs
+            value={viewMode}
+            onValueChange={(value) => onViewModeChange(value as ViewMode)}
+          >
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="ai-chat" className="flex items-center space-x-2">
+              <TabsTrigger
+                value="ai-chat"
+                className="flex items-center space-x-2"
+              >
                 <MessageSquare className="h-4 w-4" />
                 <span>AI Chat</span>
               </TabsTrigger>
-              <TabsTrigger value="bookmark-management" className="flex items-center space-x-2">
+              <TabsTrigger
+                value="bookmark-management"
+                className="flex items-center space-x-2"
+              >
                 <Grid3X3 className="h-4 w-4" />
                 <span>Manage Bookmarks</span>
               </TabsTrigger>
@@ -64,7 +80,7 @@ export function DashboardHeader({ viewMode, onViewModeChange }: DashboardHeaderP
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
                 Log out
               </DropdownMenuItem>
@@ -73,5 +89,5 @@ export function DashboardHeader({ viewMode, onViewModeChange }: DashboardHeaderP
         </div>
       </div>
     </header>
-  )
+  );
 }
