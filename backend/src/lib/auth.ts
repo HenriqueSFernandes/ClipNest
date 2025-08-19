@@ -38,6 +38,7 @@ export const auth = betterAuth({
 	advanced: {
 		crossSubDomainCookies: {
 			enabled: true,
+			domain: process.env.NODE_ENV === "production" ? ".clipnest.cloud" : undefined,
 		},
 		defaultCookieAttributes: {
 			secure: process.env.NODE_ENV === "production",
