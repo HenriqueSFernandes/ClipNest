@@ -19,7 +19,11 @@ interface LoginFormProps {
   error: string | null;
 }
 
-export default function LoginForm({ handleLogin, isLoading, error }: LoginFormProps) {
+export default function LoginForm({
+  handleLogin,
+  isLoading,
+  error,
+}: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -62,11 +66,14 @@ export default function LoginForm({ handleLogin, isLoading, error }: LoginFormPr
         </div>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
-				{error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-red-600">{error}</p>}
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Signing in..." : "Sign in"}
         </Button>
-        <Link href="/auth/forgot-password" className="text-sm text-blue-600 hover:underline">
+        <Link
+          href="/auth/forgot-password"
+          className="text-sm text-blue-600 hover:underline"
+        >
           Forgot your password?
         </Link>
       </CardFooter>

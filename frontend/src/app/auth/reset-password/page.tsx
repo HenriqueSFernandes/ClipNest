@@ -76,12 +76,14 @@ export default function ResetPasswordPage() {
     const passwordError = validatePassword(password);
     if (passwordError) {
       setError(passwordError);
+      setIsLoading(false);
       return;
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      setIsLoading(false);
       return;
     }
 

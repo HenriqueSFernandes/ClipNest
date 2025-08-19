@@ -67,7 +67,6 @@ export const useAuth = () => {
 				onError: (ctx) => {
 					setIsLoading(false);
 					setError(ctx.error.message);
-					console.log(ctx);
 				},
 			},
 		);

@@ -68,13 +68,13 @@ export default function RegistrationForm({
             {showPassword ? (
               <EyeOff className="h-5 w-5" />
             ) : (
-              <Eye className="h-w-5" />
+              <Eye className="h-5 w-5" />
             )}
           </Button>
         </div>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
-				{error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-red-600">{error}</p>}
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Creating account..." : "Create account"}
         </Button>
