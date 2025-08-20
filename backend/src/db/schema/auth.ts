@@ -1,4 +1,3 @@
-
 import {
   pgTable,
   text,
@@ -6,6 +5,9 @@ import {
   boolean,
   integer,
 } from "drizzle-orm/pg-core";
+import { folder } from "./folder";
+import { relations } from "drizzle-orm";
+import { bookmark } from "./bookmark";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -22,6 +24,11 @@ export const user = pgTable("user", {
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
+export const userRelations = relations(user, ({ many }) => ({
+  folders: many(folder),
+  bookmarks: many(bookmark),
+}));
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
