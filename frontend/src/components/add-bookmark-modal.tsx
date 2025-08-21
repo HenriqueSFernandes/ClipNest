@@ -1,12 +1,18 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -14,66 +20,233 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Sparkles } from "lucide-react"
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Sparkles,
+  Upload,
+  LinkIcon,
+  FileText,
+  ImageIcon,
+  File,
+} from "lucide-react";
 
 interface Folder {
-  id: string
-  name: string
-  count: number
+  id: string;
+  name: string;
+  count: number;
 }
 
 interface AddBookmarkModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  folders: Folder[]
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  folders: Folder[];
 }
 
-export function AddBookmarkModal({ open, onOpenChange, folders }: AddBookmarkModalProps) {
-  const [url, setUrl] = useState("")
-  const [selectedFolder, setSelectedFolder] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+export function AddBookmarkModal({
+  open,
+  onOpenChange,
+  folders,
+}: AddBookmarkModalProps) {
+  const [activeTab, setActiveTab] = useState("url");
+  const [url, setUrl] = useState("");
+  const [selectedFolder, setSelectedFolder] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [dragActive, setDragActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!url || !selectedFolder) return
+    e.preventDefault();
 
-    setIsLoading(true)
+    if (activeTab === "url" && (!url || !selectedFolder)) return;
+    if (activeTab === "file" && (!selectedFile || !selectedFolder)) return;
+
+    setIsLoading(true);
+
     // Simulate API call
     setTimeout(() => {
-      setIsLoading(false)
-      setUrl("")
-      setSelectedFolder("")
-      onOpenChange(false)
-    }, 1000)
-  }
+      setIsLoading(false);
+      setUrl("");
+      setSelectedFile(null);
+      setSelectedFolder("");
+      setActiveTab("url");
+      onOpenChange(false);
+    }, 1500);
+  };
+
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      setSelectedFile(file);
+      setActiveTab("file");
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
+  const getFileIcon = (file: File) => {
+    const type = file.type;
+    if (type.startsWith("image/")) return <ImageIcon className="h-4 w-4" />;
+    if (type.includes("pdf")) return <FileText className="h-4 w-4" />;
+    return <File className="h-4 w-4" />;
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (
+      Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
+    );
+  };
+
+  const resetForm = () => {
+    setUrl("");
+    setSelectedFile(null);
+    setSelectedFolder("");
+    setActiveTab("url");
+  };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        if (!open) resetForm();
+        onOpenChange(open);
+      }}
+    >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Add New Bookmark</DialogTitle>
           <DialogDescription>
-            Enter a URL and select a folder. Our AI will automatically extract content and make it searchable.
+            Save a website URL or upload a document to your bookmark collection.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="url">URL</Label>
-            <Input
-              id="url"
-              type="url"
-              placeholder="https://example.com"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              required
-            />
-          </div>
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="url" className="flex items-center space-x-2">
+                <LinkIcon className="h-4 w-4" />
+                <span>Website URL</span>
+              </TabsTrigger>
+              <TabsTrigger value="file" className="flex items-center space-x-2">
+                <Upload className="h-4 w-4" />
+                <span>Upload File</span>
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="url" className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="url">Website URL</Label>
+                <Input
+                  id="url"
+                  type="url"
+                  placeholder="https://example.com"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  required={activeTab === "url"}
+                />
+                <p className="text-xs text-gray-500">
+                  We&apos;ll automatically extract the title, description, and
+                  content from the webpage.
+                </p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="file" className="space-y-4">
+              <div className="space-y-2">
+                <Label>Upload Document</Label>
+                <div
+                  className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+                    dragActive
+                      ? "border-blue-400 bg-blue-50"
+                      : selectedFile
+                        ? "border-green-400 bg-green-50"
+                        : "border-gray-300 hover:border-gray-400"
+                  }`}
+                  onDragEnter={handleDrag}
+                  onDragLeave={handleDrag}
+                  onDragOver={handleDrag}
+                  onDrop={handleDrop}
+                >
+                  {selectedFile ? (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-center space-x-2 text-green-600">
+                        {getFileIcon(selectedFile)}
+                        <span className="font-medium">{selectedFile.name}</span>
+                      </div>
+                      <p className="text-sm text-gray-500">
+                        {formatFileSize(selectedFile.size)}
+                      </p>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedFile(null)}
+                      >
+                        Remove File
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Upload className="h-8 w-8 text-gray-400 mx-auto" />
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">
+                          Drop your file here, or{" "}
+                          <label className="text-blue-600 hover:text-blue-500 cursor-pointer">
+                            browse
+                            <input
+                              type="file"
+                              className="hidden"
+                              onChange={handleFileChange}
+                              accept=".pdf,.doc,.docx,.txt,.md,.html,.png,.jpg,.jpeg,.gif,.webp"
+                            />
+                          </label>
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Supports PDF, Word docs, images, text files, and more
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {selectedFile && (
+                  <p className="text-xs text-gray-500">
+                    We'll extract text content and make it searchable through
+                    AI.
+                  </p>
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
 
           <div className="space-y-2">
             <Label htmlFor="folder">Folder</Label>
-            <Select value={selectedFolder} onValueChange={setSelectedFolder} required>
+            <Select
+              value={selectedFolder}
+              onValueChange={setSelectedFolder}
+              required
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select a folder" />
               </SelectTrigger>
@@ -90,24 +263,45 @@ export function AddBookmarkModal({ open, onOpenChange, folders }: AddBookmarkMod
           <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
             <div className="flex items-center space-x-2 mb-1">
               <Sparkles className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-medium text-blue-900">AI Enhancement</span>
+              <span className="text-sm font-medium text-blue-900">
+                AI Enhancement
+              </span>
             </div>
             <p className="text-xs text-blue-700">
-              Once saved, you can ask our AI to summarize this bookmark, find related content, or answer questions about
-              it!
+              {activeTab === "url"
+                ? "Once saved, you can ask our AI to summarize this webpage, find related content, or answer questions about it!"
+                : "Once uploaded, you can ask our AI to summarize the document, extract key information, or search within its content!"}
             </p>
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading || !url || !selectedFolder}>
-              {isLoading ? "Adding..." : "Add Bookmark"}
+            <Button
+              type="submit"
+              disabled={
+                isLoading ||
+                !selectedFolder ||
+                (activeTab === "url" && !url) ||
+                (activeTab === "file" && !selectedFile)
+              }
+            >
+              {isLoading
+                ? activeTab === "url"
+                  ? "Adding Bookmark..."
+                  : "Uploading File..."
+                : activeTab === "url"
+                  ? "Add Bookmark"
+                  : "Upload & Save"}
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

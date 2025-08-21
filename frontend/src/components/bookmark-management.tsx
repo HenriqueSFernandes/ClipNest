@@ -1,45 +1,27 @@
-/* eslint-disable @next/next/no-img-element */
-"use client";
+"use client"
 
-import { useState } from "react";
-import {
-  Search,
-  Plus,
-  Edit,
-  Trash2,
-  ExternalLink,
-  Calendar,
-  Tag,
-  Grid3X3,
-  List,
-  MessageSquare,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AddBookmarkModal } from "@/components/add-bookmark-modal";
-import type { Bookmark, Folder } from "@/app/dashboard/page";
+import { useState } from "react"
+import { Search, Plus, Edit, Trash2, ExternalLink, Calendar, Tag, Grid3X3, List, MessageSquare } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { AddBookmarkModal } from "@/components/add-bookmark-modal"
+import type { Bookmark, Folder } from "@/app/dashboard/page"
 
 interface BookmarkManagementProps {
-  bookmarks: Bookmark[];
-  folders: Folder[];
-  selectedFolder: string | null;
-  onEditBookmark: (bookmark: Bookmark) => void;
-  onDeleteBookmark: (bookmarkId: string) => void;
-  onSwitchToAI: () => void;
+  bookmarks: Bookmark[]
+  folders: Folder[]
+  selectedFolder: string | null
+  onEditBookmark: (bookmark: Bookmark) => void
+  onDeleteBookmark: (bookmarkId: string) => void
+  onSwitchToAI: () => void
 }
 
-type ViewType = "grid" | "list";
-type SortBy = "date" | "title" | "folder";
+type ViewType = "grid" | "list"
+type SortBy = "date" | "title" | "folder"
 
 export function BookmarkManagement({
   bookmarks,
@@ -49,10 +31,10 @@ export function BookmarkManagement({
   onDeleteBookmark,
   onSwitchToAI,
 }: BookmarkManagementProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [viewType, setViewType] = useState<ViewType>("grid");
-  const [sortBy, setSortBy] = useState<SortBy>("date");
-  const [showAddBookmark, setShowAddBookmark] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("")
+  const [viewType, setViewType] = useState<ViewType>("grid")
+  const [sortBy, setSortBy] = useState<SortBy>("date")
+  const [showAddBookmark, setShowAddBookmark] = useState(false)
 
   // Filter and sort bookmarks
   const filteredBookmarks = bookmarks
@@ -60,32 +42,27 @@ export function BookmarkManagement({
       const matchesSearch =
         bookmark.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         bookmark.snippet.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        bookmark.tags.some((tag) =>
-          tag.toLowerCase().includes(searchQuery.toLowerCase()),
-        );
-      const matchesFolder =
-        !selectedFolder || bookmark.folder === selectedFolder;
-      return matchesSearch && matchesFolder;
+        bookmark.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+      const matchesFolder = !selectedFolder || bookmark.folder === selectedFolder
+      return matchesSearch && matchesFolder
     })
     .sort((a, b) => {
       switch (sortBy) {
         case "title":
-          return a.title.localeCompare(b.title);
+          return a.title.localeCompare(b.title)
         case "folder":
-          return a.folder.localeCompare(b.folder);
+          return a.folder.localeCompare(b.folder)
         case "date":
         default:
-          return (
-            new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
-          );
+          return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
       }
-    });
+    })
 
   const handleDeleteClick = (bookmark: Bookmark) => {
     if (confirm(`Are you sure you want to delete "${bookmark.title}"?`)) {
-      onDeleteBookmark(bookmark.id);
+      onDeleteBookmark(bookmark.id)
     }
-  };
+  }
 
   return (
     <div className="flex flex-col h-full bg-white">
@@ -97,8 +74,7 @@ export function BookmarkManagement({
               {selectedFolder ? `${selectedFolder} Bookmarks` : "All Bookmarks"}
             </h2>
             <p className="text-gray-600">
-              {filteredBookmarks.length} bookmark
-              {filteredBookmarks.length !== 1 ? "s" : ""}
+              {filteredBookmarks.length} bookmark{filteredBookmarks.length !== 1 ? "s" : ""}
               {searchQuery && ` matching "${searchQuery}"`}
             </p>
           </div>
@@ -109,7 +85,7 @@ export function BookmarkManagement({
             </Button>
             <Button onClick={() => setShowAddBookmark(true)} size="sm">
               <Plus className="h-4 w-4 mr-2" />
-              Add Bookmark
+              Add Content
             </Button>
           </div>
         </div>
@@ -130,10 +106,7 @@ export function BookmarkManagement({
           </div>
 
           <div className="flex items-center space-x-3">
-            <Select
-              value={sortBy}
-              onValueChange={(value) => setSortBy(value as SortBy)}
-            >
+            <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortBy)}>
               <SelectTrigger className="w-32">
                 <SelectValue />
               </SelectTrigger>
@@ -144,10 +117,7 @@ export function BookmarkManagement({
               </SelectContent>
             </Select>
 
-            <Tabs
-              value={viewType}
-              onValueChange={(value) => setViewType(value as ViewType)}
-            >
+            <Tabs value={viewType} onValueChange={(value) => setViewType(value as ViewType)}>
               <TabsList>
                 <TabsTrigger value="grid">
                   <Grid3X3 className="h-4 w-4" />
@@ -168,9 +138,7 @@ export function BookmarkManagement({
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
               <ExternalLink className="h-8 w-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No bookmarks found
-            </h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No bookmarks found</h3>
             <p className="text-gray-500 max-w-sm mb-4">
               {searchQuery
                 ? `No bookmarks match "${searchQuery}". Try a different search term.`
@@ -180,16 +148,13 @@ export function BookmarkManagement({
             </p>
             <Button onClick={() => setShowAddBookmark(true)}>
               <Plus className="h-4 w-4 mr-2" />
-              Add Your First Bookmark
+              Add Your First Content
             </Button>
           </div>
         ) : viewType === "grid" ? (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredBookmarks.map((bookmark) => (
-              <Card
-                key={bookmark.id}
-                className="hover:shadow-md transition-shadow group"
-              >
+              <Card key={bookmark.id} className="hover:shadow-md transition-shadow group">
                 <CardContent className="p-4">
                   <div className="space-y-3">
                     <div className="flex items-start justify-between">
@@ -199,7 +164,7 @@ export function BookmarkManagement({
                           alt=""
                           className="w-4 h-4 mt-1 flex-shrink-0"
                           onError={(e) => {
-                            e.currentTarget.src = "/simple-bookmark-icon.png";
+                            e.currentTarget.src = "/simple-bookmark-icon.png"
                           }}
                         />
                         <div className="flex-1 min-w-0">
@@ -233,9 +198,7 @@ export function BookmarkManagement({
                       </div>
                     </div>
 
-                    <p className="text-sm text-gray-600 line-clamp-2">
-                      {bookmark.snippet}
-                    </p>
+                    <p className="text-sm text-gray-600 line-clamp-2">{bookmark.snippet}</p>
 
                     <div className="flex flex-wrap gap-1">
                       {bookmark.tags.map((tag) => (
@@ -249,9 +212,7 @@ export function BookmarkManagement({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2 text-xs text-gray-500">
                         <Calendar className="h-3 w-3" />
-                        <span>
-                          {new Date(bookmark.dateAdded).toLocaleDateString()}
-                        </span>
+                        <span>{new Date(bookmark.dateAdded).toLocaleDateString()}</span>
                       </div>
                       <Badge variant="secondary" className="text-xs">
                         {bookmark.folder}
@@ -265,10 +226,7 @@ export function BookmarkManagement({
         ) : (
           <div className="space-y-2">
             {filteredBookmarks.map((bookmark) => (
-              <Card
-                key={bookmark.id}
-                className="hover:shadow-sm transition-shadow group"
-              >
+              <Card key={bookmark.id} className="hover:shadow-sm transition-shadow group">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4 flex-1 min-w-0">
@@ -277,7 +235,7 @@ export function BookmarkManagement({
                         alt=""
                         className="w-4 h-4 flex-shrink-0"
                         onError={(e) => {
-                          e.currentTarget.src = "/simple-bookmark-icon.png";
+                          e.currentTarget.src = "/simple-bookmark-icon.png"
                         }}
                       />
                       <div className="flex-1 min-w-0">
@@ -292,17 +250,11 @@ export function BookmarkManagement({
                           </a>
                           <ExternalLink className="h-3 w-3 text-gray-400 flex-shrink-0" />
                         </div>
-                        <p className="text-sm text-gray-600 truncate mt-1">
-                          {bookmark.snippet}
-                        </p>
+                        <p className="text-sm text-gray-600 truncate mt-1">{bookmark.snippet}</p>
                         <div className="flex items-center space-x-4 mt-2">
                           <div className="flex flex-wrap gap-1">
                             {bookmark.tags.slice(0, 3).map((tag) => (
-                              <Badge
-                                key={tag}
-                                variant="outline"
-                                className="text-xs"
-                              >
+                              <Badge key={tag} variant="outline" className="text-xs">
                                 {tag}
                               </Badge>
                             ))}
@@ -347,11 +299,8 @@ export function BookmarkManagement({
         )}
       </div>
 
-      <AddBookmarkModal
-        open={showAddBookmark}
-        onOpenChange={setShowAddBookmark}
-        folders={folders}
-      />
+      <AddBookmarkModal open={showAddBookmark} onOpenChange={setShowAddBookmark} folders={folders} />
     </div>
-  );
+  )
 }
+

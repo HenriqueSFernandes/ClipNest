@@ -1,10 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
-import { Send, Bot, User, Sparkles, Plus, Upload, Grid3X3 } from "lucide-react"
+import { Send, Bot, User, Sparkles, Plus, Grid3X3 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
@@ -28,7 +27,6 @@ interface AIChatInterfaceProps {
   onSwitchToManagement: () => void
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function AIChatInterface({ bookmarks, folders, selectedFolder, onSwitchToManagement }: AIChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -204,13 +202,9 @@ export function AIChatInterface({ bookmarks, folders, selectedFolder, onSwitchTo
               <Grid3X3 className="h-4 w-4 mr-2" />
               Manage Bookmarks
             </Button>
-            <Button onClick={() => setShowAddBookmark(true)} size="sm" variant="outline">
+            <Button onClick={() => setShowAddBookmark(true)} size="sm">
               <Plus className="h-4 w-4 mr-2" />
-              Add Bookmark
-            </Button>
-            <Button size="sm" variant="outline">
-              <Upload className="h-4 w-4 mr-2" />
-              Upload
+              Add Content
             </Button>
           </div>
         </div>
@@ -383,3 +377,4 @@ export function AIChatInterface({ bookmarks, folders, selectedFolder, onSwitchTo
     </div>
   )
 }
+
