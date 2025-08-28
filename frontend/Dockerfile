@@ -56,6 +56,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+COPY update-github-status.sh .
+RUN chmod +x update-github-status.sh
+
 USER nextjs
 
 EXPOSE 3000
