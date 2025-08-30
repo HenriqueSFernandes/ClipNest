@@ -1,7 +1,9 @@
 <h1 align="center">ClipNest</h1>
 <div align="center">
-  <img src="https://uptime.clipnest.cloud/api/badge/3/status?label=API%20Status&upLabel=UP&downLabel=Down&style=for-the-badge">
-  <img src="https://uptime.clipnest.cloud/api/badge/3/status?label=APP%20Status&upLabel=UP&downLabel=Down&style=for-the-badge">
+  
+  [![APP Status](https://uptime.clipnest.cloud/api/badge/3/status?label=APP%20Status&upLabel=UP&downLabel=Down&style=for-the-badge)](https://app.clipnest.cloud)
+  [![API Status](https://uptime.clipnest.cloud/api/badge/3/status?label=API%20Status&upLabel=UP&downLabel=Down&style=for-the-badge)](https://api.clipnest.cloud)
+  
 </div>
 
 ---
