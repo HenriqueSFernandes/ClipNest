@@ -1,4 +1,10 @@
-# ClipNest
+<h1 align="center">ClipNest</h1>
+<div align="center">
+  <img src="https://uptime.clipnest.cloud/api/badge/3/status?label=API%20Status&upLabel=UP&downLabel=Down&style=for-the-badge">
+  <img src="https://uptime.clipnest.cloud/api/badge/3/status?label=APP%20Status&upLabel=UP&downLabel=Down&style=for-the-badge">
+</div>
+
+---
 
 AI-Powered Smart Bookmarks. ClipNest lets you save webpages into project folders, automatically extract their content, and then conversationally search and explore your saved pages via a contextual AI chatbot.
 
