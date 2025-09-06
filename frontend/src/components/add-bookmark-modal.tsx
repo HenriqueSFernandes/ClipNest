@@ -30,6 +30,7 @@ import {
 	File,
 	XCircle,
 } from "lucide-react";
+import { api } from "@/lib/api";
 
 interface Folder {
 	id: string;
@@ -108,15 +109,28 @@ export function AddBookmarkModal({
 
 		setIsLoading(true);
 
-		// Simulate API call
-		setTimeout(() => {
-			setIsLoading(false);
-			setUrl("");
-			setSelectedFile(null);
-			setSelectedFolder("");
-			setActiveTab("url");
+		try {
+			if (activeTab === "url") {
+				// await api.post("/bookmarks/upload", { url, folderId: selectedFolder });
+			} else {
+				const formData = new FormData();
+				formData.append("file", selectedFile as Blob);
+				formData.append("folderId", selectedFolder);
+				console.log(formData)
+				await api.post("/bookmarks/upload", formData);
+			}
+
+			resetForm();
 			onOpenChange(false);
-		}, 1500);
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				setError(err.message);
+			} else {
+				setError("An unexpected error occurred.");
+			}
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const handleDrag = (e: React.DragEvent) => {

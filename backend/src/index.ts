@@ -1,27 +1,9 @@
 import { Elysia, Context } from "elysia";
-import { auth } from "./lib/auth";
+import { AuthService } from "./lib/auth";
 import { cors } from "@elysiajs/cors";
 import swagger from "@elysiajs/swagger";
 import { sendVerificationEmail } from "./lib/email";
-
-const betterAuth = new Elysia({ name: "better-auth" })
-  .mount(auth.handler)
-  .macro({
-    auth: {
-      async resolve({ status, request: { headers } }) {
-        const session = await auth.api.getSession({
-          headers,
-        });
-
-        if (!session) return status(401);
-
-        return {
-          user: session.user,
-          session: session.session,
-        };
-      },
-    },
-  });
+import { bookmarkRoutes } from "./routes/bookmark";
 
 const logger = new Elysia({ name: "logger" }).onRequest(({ request }) => {
   const { method, url } = request;
@@ -39,7 +21,8 @@ const app = new Elysia()
     }),
   )
   .use(logger)
-  .use(betterAuth)
+  .use(AuthService)
+  .use(bookmarkRoutes)
   .get("/user", ({ user }) => user, {
     auth: true,
   })

@@ -1,4 +1,6 @@
+import { ListBucketsCommand } from "@aws-sdk/client-s3";
 import { db } from "./lib/db";
+import { s3 } from "./lib/s3";
 
 const users = async () => {
   const result = await db.query.user.findMany({
@@ -27,4 +29,11 @@ const folders = async () => {
   console.log(JSON.stringify(result, null, 2));
 };
 
-users();
+const getFiles = async () => {
+	const command = new ListBucketsCommand({});
+	const result = await s3.send(command);
+	console.log(JSON.stringify(result, null, 2));
+
+}
+
+getFiles();
