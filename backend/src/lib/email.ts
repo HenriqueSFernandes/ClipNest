@@ -1,7 +1,7 @@
 import { render } from "@react-email/components";
 import nodemailer from "nodemailer";
-import { VerifyEmail } from "../emails/VerifyEmail";
 import ResetPasswordEmail from "../emails/ResetPassword";
+import { VerifyEmail } from "../emails/VerifyEmail";
 
 const transporter = nodemailer.createTransport({
 	host: process.env.EMAIL_HOST,
@@ -10,9 +10,9 @@ const transporter = nodemailer.createTransport({
 	auth:
 		process.env.EMAIL_USER && process.env.EMAIL_PASSWORD
 			? {
-				user: process.env.EMAIL_USER,
-				pass: process.env.EMAIL_PASSWORD,
-			}
+					user: process.env.EMAIL_USER,
+					pass: process.env.EMAIL_PASSWORD,
+				}
 			: undefined,
 });
 
@@ -35,7 +35,7 @@ export const sendVerificationEmail = async ({
 	userName,
 	userEmail,
 }: sendVerificationEmailProps) => {
-	 const url: string =
+	const url: string =
 		verificationUrl +
 		(callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : "");
 	const verifyEmailHtml = await render(
@@ -59,7 +59,6 @@ export const sendPasswordResetEmail = async ({
 	userName,
 	userEmail,
 }: sendPasswordResetEmailProps) => {
-
 	const verifyEmailHtml = await render(
 		ResetPasswordEmail({
 			url,

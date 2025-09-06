@@ -19,61 +19,61 @@ interface VerifyEmailProps {
 	userName?: string;
 }
 
-export const VerifyEmail = ({
-	url,
-	userName,
-}: VerifyEmailProps) => {
-				const frontendUrl = process.env.BASE_FRONTEND_URL || "https://clipnest.cloud";
+export const VerifyEmail = ({ url, userName }: VerifyEmailProps) => {
+	const frontendUrl = process.env.BASE_FRONTEND_URL || "https://clipnest.cloud";
 
-        return (
-            <Html>
-                <Head />
-                <Body style={main}>
-                    <Preview>Confirm your ClipNest account</Preview>
-                    <Container style={container}>
-                        <Img
-                            src={`${frontendUrl}/clipnest-logo.svg`}
-                            width="42"
-                            height="42"
-                            alt="ClipNest"
-                            style={logo} />
+	return (
+		<Html>
+			<Head />
+			<Body style={main}>
+				<Preview>Confirm your ClipNest account</Preview>
+				<Container style={container}>
+					<Img
+						src={`${frontendUrl}/clipnest-logo.svg`}
+						width="42"
+						height="42"
+						alt="ClipNest"
+						style={logo}
+					/>
 
-                        {/* Heading */}
-                        <Heading style={heading}>Confirm your ClipNest account</Heading>
+					{/* Heading */}
+					<Heading style={heading}>Confirm your ClipNest account</Heading>
 
-                        {/* Greeting */}
-                        <Text style={paragraph}>{userName ? `Hi ${userName},` : "Hello,"}</Text>
-                        <Text style={paragraph}>
-                            Thanks for signing up to <strong>ClipNest</strong>. Please confirm
-                            your email address to activate your account.
-                        </Text>
+					{/* Greeting */}
+					<Text style={paragraph}>
+						{userName ? `Hi ${userName},` : "Hello,"}
+					</Text>
+					<Text style={paragraph}>
+						Thanks for signing up to <strong>ClipNest</strong>. Please confirm
+						your email address to activate your account.
+					</Text>
 
-                        {/* Button */}
-                        <Section style={buttonContainer}>
-                            <Button style={button} href={url}>
-                                Confirm Your Account
-                            </Button>
-                        </Section>
+					{/* Button */}
+					<Section style={buttonContainer}>
+						<Button style={button} href={url}>
+							Confirm Your Account
+						</Button>
+					</Section>
 
-                        {/* Fallback link */}
-                        <Text style={paragraph}>
-                            Didn’t work? Copy and paste this link into your browser:
-                        </Text>
-                        <Link href={url} style={link}>
-                            {url}
-                        </Link>
+					{/* Fallback link */}
+					<Text style={paragraph}>
+						Didn’t work? Copy and paste this link into your browser:
+					</Text>
+					<Link href={url} style={link}>
+						{url}
+					</Link>
 
-                        <Hr style={hr} />
+					<Hr style={hr} />
 
-                        {/* Footer */}
-                        <Text style={footer}>
-                            If you didn’t create a ClipNest account, you can ignore this email.
-                        </Text>
-                    </Container>
-                </Body>
-            </Html>
-        );
-    };
+					{/* Footer */}
+					<Text style={footer}>
+						If you didn’t create a ClipNest account, you can ignore this email.
+					</Text>
+				</Container>
+			</Body>
+		</Html>
+	);
+};
 
 VerifyEmail.PreviewProps = {
 	verificationUrl: "https://clipnest.cloud/verify/abc123",
