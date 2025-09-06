@@ -115,8 +115,7 @@ export function AddBookmarkModal({
 			} else {
 				const formData = new FormData();
 				formData.append("file", selectedFile as Blob);
-				formData.append("folderId", selectedFolder);
-				console.log(formData)
+				formData.append("folderName", selectedFolder);
 				await api.post("/bookmarks/upload", formData);
 			}
 

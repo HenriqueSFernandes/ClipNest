@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { FolderSidebar } from "@/components/folder-sidebar"
 import { AIChatInterface } from "@/components/ai-chat-interface"
 import { BookmarkManagement } from "@/components/bookmark-management"
 import { AddFolderModal } from "@/components/add-folder-modal"
 import { EditBookmarkModal } from "@/components/edit-bookmark-modal"
+import { api } from "@/lib/api"
 
 export type ViewMode = "ai-chat" | "bookmark-management"
 
@@ -34,12 +35,25 @@ export default function DashboardPage() {
   const [showAddFolder, setShowAddFolder] = useState(false)
   const [editingBookmark, setEditingBookmark] = useState<Bookmark | null>(null)
 
-  const [folders, setFolders] = useState<Folder[]>([
-    { id: "1", name: "Work", count: 12 },
-    { id: "2", name: "Personal", count: 8 },
-    { id: "3", name: "Learning", count: 15 },
-    { id: "4", name: "Design", count: 6 },
-  ])
+  const [folders, setFolders] = useState<Folder[]>([])
+
+  useEffect(() => {
+    const fetchFolders = async () => {
+      try {
+        const fetchedFolders = await api.get("/folders")
+				const parsedFolders: Folder[] = fetchedFolders.map((folder: any) => ({
+					id: folder.id,
+					name: folder.name,
+					count: 10, // Placeholder count, replace with actual data if available
+				}))
+				setFolders(parsedFolders)
+      } catch (error) {
+        console.error("Failed to fetch folders:", error)
+      }
+    }
+
+    fetchFolders()
+  }, [])
 
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([
     {
@@ -120,6 +134,10 @@ export default function DashboardPage() {
     setEditingBookmark(null)
   }
 
+  const handleFolderAdded = (newFolder: Folder) => {
+    setFolders((prevFolders) => [...prevFolders, newFolder]);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <DashboardHeader viewMode={viewMode} onViewModeChange={setViewMode} />
@@ -154,7 +172,7 @@ export default function DashboardPage() {
         </main>
       </div>
 
-      <AddFolderModal open={showAddFolder} onOpenChange={setShowAddFolder} />
+      <AddFolderModal open={showAddFolder} onOpenChange={setShowAddFolder} onFolderAdded={handleFolderAdded}/>
 
       {editingBookmark && (
         <EditBookmarkModal
