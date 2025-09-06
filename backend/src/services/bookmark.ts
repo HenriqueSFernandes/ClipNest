@@ -1,6 +1,7 @@
 import { db } from "../lib/db";
 import { bookmark } from "../db/schema";
 import { uploadFileToS3 } from "../lib/s3";
+import { eq } from "drizzle-orm";
 
 export const createBookmark = async (data: typeof bookmark.$inferInsert) => {
 	const newBookmark = await db.insert(bookmark).values(data).returning();
@@ -11,7 +12,9 @@ export const uploadBookmark = async (
 	file: Buffer,
 	title: string,
 	folderId: number,
+	folderName: string,
 	userId: string,
+	username: string,
 	contentType: string,
 ) => {
 	const allowedFileTypes = {
@@ -35,17 +38,25 @@ export const uploadBookmark = async (
 
 	const randomSuffix = Math.floor(Math.random() * 10000);
 
-	const storageKey = `bookmark_${userId}_${Date.now()}${randomSuffix}`;
-
-	await uploadFileToS3(file, storageKey, contentType);
+	const storageKey = `${username}-${userId}/${folderName}-${folderId}/bookmark_${Date.now()}_${randomSuffix}`;
 
 	const newBookmark = await createBookmark({
 		title,
 		folder_id: folderId,
 		user_id: userId,
-		storageKey,
 		contentType,
+		storageKey,
+		status: "uploading",
 	});
+
+	console.log("Created bookmark:", newBookmark);
+
+	await uploadFileToS3(file, storageKey, contentType);
+
+	await db
+		.update(bookmark)
+		.set({ status: "uploaded" })
+		.where(eq(bookmark.id, newBookmark.id));
 
 	return newBookmark;
 };

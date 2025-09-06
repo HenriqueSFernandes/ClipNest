@@ -27,7 +27,7 @@ export const bookmarkRoutes = new Elysia({ prefix: "/bookmarks" })
 			// const { file, title, folder_id, contentType } = body;
 			// TODO: update to use the folder ID
 			// TODO: check if the user can actually upload to that folder
-			const { file, folderId } = body;
+			const { file, folderName } = body;
 			const title = file.name;
 			const contentType = file.type;
 			console.log(body, user);
@@ -37,7 +37,9 @@ export const bookmarkRoutes = new Elysia({ prefix: "/bookmarks" })
 					title,
 					// folderId,
 					1,
+					folderName,
 					user.id,
+					user.name,
 					contentType,
 				);
 				return newBookmark;
@@ -50,7 +52,7 @@ export const bookmarkRoutes = new Elysia({ prefix: "/bookmarks" })
 			body: t.Object({
 				file: t.File(),
 				// title: t.String(),
-				folderId: t.String(),
+				folderName: t.String(),
 				// contentType: t.String(),
 			}),
 		},
