@@ -13,6 +13,8 @@ COPY src src
 COPY tsconfig.json .
 COPY drizzle.config.ts .
 # COPY public public
+COPY update-github-status.sh .
+RUN chmod +x update-github-status.sh
 
 ENV NODE_ENV=production
 CMD ["bun", "src/index.ts"]

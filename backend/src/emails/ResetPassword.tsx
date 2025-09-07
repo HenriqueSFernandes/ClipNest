@@ -23,59 +23,63 @@ export const ResetPasswordEmail = ({
 	url,
 	userName,
 }: ResetPasswordEmailProps) => {
-				const frontendUrl = process.env.BASE_FRONTEND_URL || "https://clipnest.cloud";
+	const frontendUrl = process.env.BASE_FRONTEND_URL || "https://clipnest.cloud";
 
-        return (
-            <Html>
-                <Head />
-                <Body style={main}>
-                    <Preview>Reset your ClipNest password</Preview>
-                    <Container style={container}>
-                        <Img
-                            src={`${frontendUrl}/clipnest-logo.svg`}
-                            width="42"
-                            height="42"
-                            alt="ClipNest"
-                            style={logo} />
+	return (
+		<Html>
+			<Head />
+			<Body style={main}>
+				<Preview>Reset your ClipNest password</Preview>
+				<Container style={container}>
+					<Img
+						src={`${frontendUrl}/clipnest-logo.svg`}
+						width="42"
+						height="42"
+						alt="ClipNest"
+						style={logo}
+					/>
 
-                        {/* Heading */}
-                        <Heading style={heading}>Reset your password</Heading>
+					{/* Heading */}
+					<Heading style={heading}>Reset your password</Heading>
 
-                        {/* Greeting */}
-                        <Text style={paragraph}>{userName ? `Hi ${userName},` : "Hello,"}</Text>
-                        <Text style={paragraph}>
-                            We received a request to reset the password for your{" "}
-                            <strong>ClipNest</strong> account. Click the button below to set a new
-                            password.
-                        </Text>
+					{/* Greeting */}
+					<Text style={paragraph}>
+						{userName ? `Hi ${userName},` : "Hello,"}
+					</Text>
+					<Text style={paragraph}>
+						We received a request to reset the password for your{" "}
+						<strong>ClipNest</strong> account. Click the button below to set a
+						new password.
+					</Text>
 
-                        {/* Button */}
-                        <Section style={buttonContainer}>
-                            <Button style={button} href={url}>
-                                Reset Password
-                            </Button>
-                        </Section>
+					{/* Button */}
+					<Section style={buttonContainer}>
+						<Button style={button} href={url}>
+							Reset Password
+						</Button>
+					</Section>
 
-                        {/* Fallback link */}
-                        <Text style={paragraph}>
-                            If the button doesn’t work, copy and paste this link into your browser:
-                        </Text>
-                        <Link href={url} style={link}>
-                            {url}
-                        </Link>
+					{/* Fallback link */}
+					<Text style={paragraph}>
+						If the button doesn’t work, copy and paste this link into your
+						browser:
+					</Text>
+					<Link href={url} style={link}>
+						{url}
+					</Link>
 
-                        <Hr style={hr} />
+					<Hr style={hr} />
 
-                        {/* Footer */}
-                        <Text style={footer}>
-                            If you didn’t request a password reset, you can safely ignore this
-                            email—your password will remain unchanged.
-                        </Text>
-                    </Container>
-                </Body>
-            </Html>
-        );
-    };
+					{/* Footer */}
+					<Text style={footer}>
+						If you didn’t request a password reset, you can safely ignore this
+						email—your password will remain unchanged.
+					</Text>
+				</Container>
+			</Body>
+		</Html>
+	);
+};
 
 ResetPasswordEmail.PreviewProps = {
 	url: "https://clipnest.cloud/reset/xyz456",
@@ -96,7 +100,7 @@ const container = {
 	margin: "0 auto",
 	padding: "20px 0 48px",
 	maxWidth: "560px",
-}
+};
 
 const logo = {
 	borderRadius: 8,
@@ -147,4 +151,3 @@ const footer = {
 	color: "#888888",
 	lineHeight: "20px",
 };
-

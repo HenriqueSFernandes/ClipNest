@@ -1,8 +1,7 @@
-import { Elysia, Context } from "elysia";
 import { AuthService } from "./lib/auth";
 import { cors } from "@elysiajs/cors";
 import swagger from "@elysiajs/swagger";
-import { sendVerificationEmail } from "./lib/email";
+import { Context, Elysia } from "elysia";
 import { bookmarkRoutes } from "./routes/bookmark";
 import { folderRoutes } from "./routes/folder";
 

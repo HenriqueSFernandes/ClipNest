@@ -1,9 +1,9 @@
 import {
+  boolean,
+  integer,
   pgTable,
   text,
   timestamp,
-  boolean,
-  integer,
 } from "drizzle-orm/pg-core";
 import { folder } from "./folder";
 import { relations } from "drizzle-orm";
