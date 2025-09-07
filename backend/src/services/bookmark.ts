@@ -1,7 +1,7 @@
 import { db } from "../lib/db";
 import { bookmark } from "../db/schema";
 import { uploadFileToS3 } from "../lib/s3";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export const createBookmark = async (data: typeof bookmark.$inferInsert) => {
 	const newBookmark = await db.insert(bookmark).values(data).returning();
@@ -17,7 +17,7 @@ export const uploadBookmark = async (
 	username: string,
 	contentType: string,
 ) => {
-	const allowedFileTypes = {
+	const allowedFileTypes: Record<string, string[]> = {
 		"application/pdf": [".pdf"],
 		"application/msword": [".doc"],
 		"application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
@@ -36,9 +36,11 @@ export const uploadBookmark = async (
 		throw new Error("Unsupported file type");
 	}
 
+	const fileExtension = allowedFileTypes[contentType][0];
+
 	const randomSuffix = Math.floor(Math.random() * 10000);
 
-	const storageKey = `${username}-${userId}/${folderName}-${folderId}/bookmark_${Date.now()}_${randomSuffix}`;
+	const storageKey = `${username}-${userId}/${folderName}-${folderId}/bookmark_${Date.now()}_${randomSuffix}${fileExtension}`;
 
 	const newBookmark = await createBookmark({
 		title,
@@ -59,4 +61,18 @@ export const uploadBookmark = async (
 		.where(eq(bookmark.id, newBookmark.id));
 
 	return newBookmark;
+};
+
+export const getBookmarksInFolder = async (
+	folderId: number,
+	userId: string,
+) => {
+	const bookmarks = await db
+		.select()
+		.from(bookmark)
+		.where(
+			and(eq(bookmark.folder_id, folderId), eq(bookmark.user_id, userId)),
+		);
+
+	return bookmarks;
 };

@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 
 import { AuthService } from "../lib/auth";
 import { createFolder, getFoldersForUser } from "../services/folder";
+import { getBookmarksInFolder } from "../services/bookmark";
 
 export const folderRoutes = new Elysia({ prefix: "/folders" })
 	.use(AuthService)
@@ -32,5 +33,16 @@ export const folderRoutes = new Elysia({ prefix: "/folders" })
 			body: t.Object({
 				name: t.String(),
 			}),
+		},
+	)
+	.get(
+		"/:id/bookmarks",
+		async ({ user, params }) => {
+			const { id } = params;
+			const bookmarks = await getBookmarksInFolder(Number(id), user.id);
+			return bookmarks;
+		},
+		{
+			auth: true,
 		},
 	);
