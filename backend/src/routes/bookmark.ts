@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
-import { createBookmark, uploadBookmark } from "../services/bookmark";
 import { AuthService } from "../lib/auth";
+import { createBookmark, uploadBookmark } from "../services/bookmark";
 
 export const bookmarkRoutes = new Elysia({ prefix: "/bookmarks" })
 	.use(AuthService)

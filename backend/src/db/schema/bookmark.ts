@@ -1,16 +1,16 @@
+import { relations } from "drizzle-orm";
 import {
 	integer,
 	json,
+	pgEnum,
 	pgTable,
 	serial,
 	text,
 	timestamp,
-	pgEnum,
 } from "drizzle-orm/pg-core";
-import { folder } from "./folder";
 import { user } from "./auth";
-import { relations } from "drizzle-orm";
 import { bookmarkChunk } from "./bookmark_chunk";
+import { folder } from "./folder";
 
 export const statusEnum = pgEnum("status", [
 	"created",

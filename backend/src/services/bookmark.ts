@@ -1,7 +1,7 @@
-import { db } from "../lib/db";
-import { bookmark } from "../db/schema";
-import { uploadFileToS3 } from "../lib/s3";
 import { and, eq } from "drizzle-orm";
+import { bookmark } from "../db/schema";
+import { db } from "../lib/db";
+import { uploadFileToS3 } from "../lib/s3";
 
 export const createBookmark = async (data: typeof bookmark.$inferInsert) => {
 	const newBookmark = await db.insert(bookmark).values(data).returning();
@@ -70,9 +70,7 @@ export const getBookmarksInFolder = async (
 	const bookmarks = await db
 		.select()
 		.from(bookmark)
-		.where(
-			and(eq(bookmark.folder_id, folderId), eq(bookmark.user_id, userId)),
-		);
+		.where(and(eq(bookmark.folder_id, folderId), eq(bookmark.user_id, userId)));
 
 	return bookmarks;
 };

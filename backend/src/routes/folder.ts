@@ -1,8 +1,8 @@
 import { Elysia, t } from "elysia";
 
 import { AuthService } from "../lib/auth";
-import { createFolder, getFoldersForUser } from "../services/folder";
 import { getBookmarksInFolder } from "../services/bookmark";
+import { createFolder, getFoldersForUser } from "../services/folder";
 
 export const folderRoutes = new Elysia({ prefix: "/folders" })
 	.use(AuthService)
