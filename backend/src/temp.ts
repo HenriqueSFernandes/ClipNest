@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/noUnusedVariables: temporary file */
 import { ListBucketsCommand } from "@aws-sdk/client-s3";
 import { db } from "./lib/db";
 import { s3 } from "./lib/s3";

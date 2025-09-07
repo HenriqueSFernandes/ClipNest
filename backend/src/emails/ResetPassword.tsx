@@ -12,6 +12,7 @@ import {
 	Section,
 	Text,
 } from "@react-email/components";
+// biome-ignore lint/correctness/noUnusedImports: it's used in the JSX
 import React from "react";
 
 interface ResetPasswordEmailProps {
