@@ -23,7 +23,8 @@ interface Message {
 interface AIChatInterfaceProps {
   bookmarks: Bookmark[]
   folders: Folder[]
-  selectedFolder: string | null
+  selectedFolder: number | null
+  isLoading: boolean
   onSwitchToManagement: () => void
 }
 
@@ -71,7 +72,7 @@ export function AIChatInterface({ bookmarks, folders, selectedFolder, onSwitchTo
     if (lowerMessage.includes("design") || lowerMessage.includes("figma")) {
       const designBookmarks = bookmarks.filter(
         (b) =>
-          b.folder.toLowerCase().includes("design") ||
+          folders.find(f => f.id === b.folder)?.name.toLowerCase().includes("design") ||
           b.title.toLowerCase().includes("figma") ||
           b.content.toLowerCase().includes("design") ||
           b.tags.some((tag) => tag.includes("design") || tag.includes("ui")),
@@ -84,7 +85,7 @@ export function AIChatInterface({ bookmarks, folders, selectedFolder, onSwitchTo
 
     if (lowerMessage.includes("work") || lowerMessage.includes("github")) {
       const workBookmarks = bookmarks.filter(
-        (b) => b.folder.toLowerCase().includes("work") || b.title.toLowerCase().includes("github"),
+        (b) => folders.find(f => f.id === b.folder)?.name.toLowerCase().includes("work") || b.title.toLowerCase().includes("github"),
       )
       return {
         content: "I found your work-related bookmarks:",
@@ -274,7 +275,7 @@ export function AIChatInterface({ bookmarks, folders, selectedFolder, onSwitchTo
                                   </div>
                                   <div className="flex items-center space-x-2">
                                     <Badge variant="secondary" className="text-xs">
-                                      {bookmark.folder}
+                                      {folders.find(f => f.id === bookmark.folder)?.name}
                                     </Badge>
                                     <span className="text-xs text-gray-500">
                                       {new Date(bookmark.dateAdded).toLocaleDateString()}

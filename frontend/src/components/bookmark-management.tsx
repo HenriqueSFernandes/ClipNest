@@ -14,7 +14,8 @@ import type { Bookmark, Folder } from "@/app/dashboard/page"
 interface BookmarkManagementProps {
   bookmarks: Bookmark[]
   folders: Folder[]
-  selectedFolder: string | null
+  selectedFolder: number | null
+  isLoading: boolean
   onEditBookmark: (bookmark: Bookmark) => void
   onDeleteBookmark: (bookmarkId: string) => void
   onSwitchToAI: () => void
@@ -27,6 +28,7 @@ export function BookmarkManagement({
   bookmarks,
   folders,
   selectedFolder,
+  isLoading,
   onEditBookmark,
   onDeleteBookmark,
   onSwitchToAI,
@@ -51,7 +53,9 @@ export function BookmarkManagement({
         case "title":
           return a.title.localeCompare(b.title)
         case "folder":
-          return a.folder.localeCompare(b.folder)
+          const folderA = folders.find((f) => f.id === a.folder)?.name || ""
+          const folderB = folders.find((f) => f.id === b.folder)?.name || ""
+          return folderA.localeCompare(folderB)
         case "date":
         default:
           return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
@@ -71,7 +75,7 @@ export function BookmarkManagement({
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
-              {selectedFolder ? `${selectedFolder} Bookmarks` : "All Bookmarks"}
+              {selectedFolder ? `${folders.find(f => f.id === selectedFolder)?.name} Bookmarks` : "All Bookmarks"}
             </h2>
             <p className="text-gray-600">
               {filteredBookmarks.length} bookmark{filteredBookmarks.length !== 1 ? "s" : ""}
@@ -133,7 +137,11 @@ export function BookmarkManagement({
 
       {/* Content */}
       <div className="flex-1 overflow-auto p-6">
-        {filteredBookmarks.length === 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full">
+            <p>Loading bookmarks...</p>
+          </div>
+        ) : filteredBookmarks.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
               <ExternalLink className="h-8 w-8 text-gray-400" />
@@ -143,7 +151,7 @@ export function BookmarkManagement({
               {searchQuery
                 ? `No bookmarks match "${searchQuery}". Try a different search term.`
                 : selectedFolder
-                  ? `No bookmarks in "${selectedFolder}" folder yet.`
+                  ? `No bookmarks in "${folders.find(f => f.id === selectedFolder)?.name}" folder yet.`
                   : "You haven't saved any bookmarks yet."}
             </p>
             <Button onClick={() => setShowAddBookmark(true)}>
@@ -215,7 +223,7 @@ export function BookmarkManagement({
                         <span>{new Date(bookmark.dateAdded).toLocaleDateString()}</span>
                       </div>
                       <Badge variant="secondary" className="text-xs">
-                        {bookmark.folder}
+                        {folders.find(f => f.id === bookmark.folder)?.name}
                       </Badge>
                     </div>
                   </div>
@@ -265,7 +273,7 @@ export function BookmarkManagement({
                             )}
                           </div>
                           <Badge variant="secondary" className="text-xs">
-                            {bookmark.folder}
+                            {folders.find(f => f.id === bookmark.folder)?.name}
                           </Badge>
                           <span className="text-xs text-gray-500">
                             {new Date(bookmark.dateAdded).toLocaleDateString()}

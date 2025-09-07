@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 import type { ViewMode } from "@/app/dashboard/page";
 
 interface FolderSidebarProps {
-	folders: { id: string; name: string; count: number }[];
-	selectedFolder: string | null;
-	onSelectFolder: (folderId: string | null) => void;
+	folders: { id: number; name: string; count: number }[];
+	selectedFolder: number | null;
+	onSelectFolder: (folderId: number | null) => void;
 	onAddFolder: () => void;
 	viewMode: ViewMode;
 }
@@ -81,17 +81,17 @@ export function FolderSidebar({
 						{folders.map((folder) => (
 							<button
 								key={folder.id}
-								onClick={() => onSelectFolder(folder.name)}
+								onClick={() => onSelectFolder(folder.id)}
 								className={cn(
 									"w-full flex items-center space-x-3 px-3 py-2 text-left rounded-lg transition-colors",
-									selectedFolder === folder.name
+									selectedFolder === folder.id
 										? "bg-blue-50 text-blue-700"
 										: "text-gray-700 hover:bg-gray-50",
 								)}
 							>
 								<Folder className="h-4 w-4" />
 								<span className="flex-1">{folder.name}</span>
-								<span className="text-sm text-gray-500">{folder.count}</span>
+								{/*<span className="text-sm text-gray-500">{folder.count}</span> */}
 							</button>
 						))}
 					</div>
